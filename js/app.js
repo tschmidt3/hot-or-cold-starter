@@ -13,7 +13,17 @@ $(document).ready(function(){
         $("#guessButton").click(function(){
             feedback(secretNumber);
         });
-
+        
+        /*---Check Guessed number when enter key is hit ---*/
+        $("#userGuess").keyup(function(e){
+           if (e.keyCode === 13) { 
+                feedback(secretNumber);
+                return false; //this will stop the default event triggering 
+            } 
+        });
+        window.onbeforeunload = function() {
+            return "refreshing this page will cause the game to start over";
+        };
 });
 
 
