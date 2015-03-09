@@ -36,6 +36,8 @@ function newGame(){
     $("span#count").text(0);
     //generate new number
     secretNumber = generateNumber();
+    //clear guess box
+    $("#userGuess").val("");
     
 };
 //named function to generate secret number between 1 and 100
@@ -46,12 +48,9 @@ function generateNumber(){
 //named function to provide feedback (too high, too low, or just right)
 //reads in the guess and tells if it is an integer, if true passes to the set range, count, and record functions
 function feedback(answer){
-    //want to add functionality that does not allow reguessing
     var guess = $("#userGuess").val();
     if (isInt(guess)){
-        if(previousGuess<100){
-            console.log(previousGuess);
-        }
+        
         incorrect = difference(guess, answer, previousGuess);
         if (incorrect){
             //Run counting function
@@ -87,7 +86,7 @@ function difference(guess, answer, previousGuess){
     else {
         if(+guess===answer){
             incorrect = false;
-            if (confirm('Do you want to play again?')) {
+            if (confirm('Correct! \nDo you want to play again?')) {
                 newGame();
             }
         }
