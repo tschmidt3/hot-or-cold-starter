@@ -1,7 +1,6 @@
 
 $(document).ready(function(){
-	var secretNumber = generateNumber();
-        previousGuess = 101;
+	newGame();
 	/*--- Display information modal box ---*/
   	$(".what").click(function(){
             $(".overlay").fadeIn(1000);
@@ -30,34 +29,24 @@ $(document).ready(function(){
         });   
 });
 function newGame(){
-    //clear guesses
     $("ul#guessList").children().remove();
-    //set count to 0
     $("span#count").text(0);
-    //generate new number
     secretNumber = generateNumber();
-    //clear guess box
-    $("#userGuess").val("");
-    
+    $("#userGuess").val(""); 
+    previousGuess = 101;
+    $("#feedback").text("Make your Guess!").css("background","#cc324b");
 };
-//named function to generate secret number between 1 and 100
+
 function generateNumber(){
-    var secretNumber = Math.floor((Math.random() * 100) + 1);
-    return secretNumber;
+    return Math.floor((Math.random() * 100) + 1);
 };
-//named function to provide feedback (too high, too low, or just right)
-//reads in the guess and tells if it is an integer, if true passes to the set range, count, and record functions
 function feedback(answer){
     var guess = $("#userGuess").val();
     if (isInt(guess)){
-        
         incorrect = difference(guess, answer, previousGuess);
         if (incorrect){
-            //Run counting function
             count();
-            //Run the record function
             record(guess);
-            //Store previous guess
             previousGuess = guess;
         }
     }
@@ -68,51 +57,43 @@ function feedback(answer){
 //set range of hot vs cold
 function difference(guess, answer, previousGuess){
     incorrect = true;
-    //If first guess (previousGuess = 100 high vs low, if else do hotter vs colder
-    if(previousGuess===101){
-        if (+guess===answer){
+    if (+guess===answer){
             incorrect = false;
             if (confirm('Correct! \nDo you want to play again?')) {
                 newGame();
             }
         }
-        else if (+guess>answer){
-            alert("too high");
+    if(previousGuess===101){
+        if (+guess>answer){
+            $("#feedback").text("Too High").css("background","#cc324b");
         }
         else {
-            alert("too low");
+            $("#feedback").text("Too Low").css("background","blue");
         }
     }
     else {
-        if(+guess===answer){
-            incorrect = false;
-            if (confirm('Correct! \nDo you want to play again?')) {
-                newGame();
-            }
-        }
-        else if(Math.abs(guess-answer)>Math.abs(previousGuess-answer)){
-            alert("colder");
+        if(Math.abs(guess-answer)>Math.abs(previousGuess-answer)){
+            $("#feedback").text("Colder").css("background","blue");
         }
         else{
-            alert("warmer");
+            $("#feedback").text("Warmer").css("background","#cc324b");
         }
     }
     return incorrect;   
 }
-//track how many guesses made
 function count(){
     var temp = $("span#count").text();
-    $("span#count").text(+temp+1); 
+    $("span#count").text(+$("span#count").text()+1); 
 }
 //show the guesses already made
 function record(guess){
+    var tempColor = $("#feedback").css("background-color");
     $("ul#guessList").append("<li>"+guess+"</li>");
+    $("ul#guessList").children().last().css("background",tempColor);
 }
 function isInt(n){
     if(n<=100 && n>=0){
         return n % 1 === 0; 
     }
-    else{
-        return false;
-    }
+    else{return false;}
 }
