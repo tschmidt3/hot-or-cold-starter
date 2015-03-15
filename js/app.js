@@ -20,9 +20,6 @@ $(document).ready(function(){
                 return false; //this will stop the default event triggering 
             } 
         });
-        window.onbeforeunload = function() {
-            return "Refreshing this page will cause the game to start over";
-        };
         //New Game
         $(".new").click(function(){
             newGame();  
